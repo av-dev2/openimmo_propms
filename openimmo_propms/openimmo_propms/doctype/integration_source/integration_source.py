@@ -77,7 +77,7 @@ class IntegrationSource(Document):
 		except Exception:
 			frappe.throw(_("Export Filters (JSON) must be valid JSON"))
 
-		if not isinstance(parsed_filters, (dict, list)):
+		if not isinstance(parsed_filters, dict | list):
 			frappe.throw(_("Export Filters (JSON) must be a JSON object or list"))
 
 	def _require_export_mapping(self, xml_path, message):
