@@ -23,12 +23,12 @@ dev = [
     "pre-commit",
 ]
 
-[tool.bench.frappe-dependencies]
-frappe = ">=15.0.0,<17.0.0"
-
 # These dependencies are only installed when developer mode is enabled
 [tool.bench.dev-dependencies]
 # package_name = "~=1.1.0"
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<17.0.0"
 
 [tool.ruff]
 line-length = 110
