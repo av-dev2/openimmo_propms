@@ -40,7 +40,6 @@ class FTPProcessor(BaseProcessor):
 
 			ftp.quit()
 
-			status_msg = _("Successfully fetched {0} new files").format(len(new_jobs))
 			self.update_source_status("Success")
 			return new_jobs
 
@@ -86,7 +85,7 @@ class FTPProcessor(BaseProcessor):
 			return ftp
 		except Exception as e:
 			# Fallback to plain FTP if TLS fails
-			frappe.log_error(f"FTP TLS failed, trying plain FTP: {str(e)}", "FTP Sync")
+			frappe.log_error(f"FTP TLS failed, trying plain FTP: {e!s}", "FTP Sync")
 			ftp = ftplib.FTP(timeout=60)
 			ftp.connect(host, port)
 			ftp.login(user, password)
@@ -103,7 +102,7 @@ class FTPProcessor(BaseProcessor):
 			ftp.retrbinary(f"RETR {filename}", f.write)
 
 		# 2. Verify Integrity (Check for closing tag as per guide #6)
-		with open(local_path, "r", encoding="utf-8", errors="ignore") as f:
+		with open(local_path, encoding="utf-8", errors="ignore") as f:
 			content = f.read()
 			if "</openimmo>" not in content.lower():
 				os.remove(local_path)
