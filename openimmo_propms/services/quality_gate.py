@@ -46,13 +46,15 @@ def validate_quality_gate(source, record: dict) -> tuple[bool, list[str]]:
 			"cint": cint,
 			"frappe": frappe,
 		}
+		# Frappe safe_exec sandbox, script is an administrator-only field.
+		# nosemgrep
 		safe_exec(script, _globals=None, _locals=exec_context)
 		is_valid = bool(exec_context.get("is_valid", True))
 		if not is_valid and not reasons:
 			reasons.append("Quality Gate Failed")
 		return is_valid, reasons
 	except Exception as exc:
-		error_msg = f"Quality Gate script error: {str(exc)}"
+		error_msg = f"Quality Gate script error: {exc!s}"
 		frappe.logger("openimmo_export").error(error_msg)
 		return False, [error_msg]
 
