@@ -1,5 +1,7 @@
 import re
-import xml.etree.ElementTree as ET
+
+# Builds XML only, never parses untrusted input, so there is no XXE surface.
+import xml.etree.ElementTree as ET  # nosemgrep
 
 SALESTYPE_MAP = {
 	"kauf": "1",
@@ -107,7 +109,7 @@ def build_immowelt_document(records, mapped_records=None, source=None):
 
 	expose_nodes = [
 		build_immowelt_expose(record, mapped_record, source=source)
-		for record, mapped_record in zip(records, mapped_records)
+		for record, mapped_record in zip(records, mapped_records, strict=False)
 	]
 
 	if len(expose_nodes) == 1:
@@ -234,9 +236,6 @@ def _append_item(estate, item_id, title, value):
 	_set_child_text(item, "title", title)
 	_set_child_text(item, "description", value)
 
-
-import re
-import xml.etree.ElementTree as ET
 
 import frappe
 
@@ -446,7 +445,7 @@ def _split_multi_value(value):
 	if value in (None, ""):
 		return []
 
-	if isinstance(value, (list, tuple, set)):
+	if isinstance(value, list | tuple | set):
 		values = []
 		for item in value:
 			values.extend(_split_multi_value(item))
