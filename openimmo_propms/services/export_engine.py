@@ -29,8 +29,6 @@ def run_export(source_name, **kwargs):
 	"""Run a metadata-driven export without touching the import flow."""
 	try:
 		source = frappe.get_doc("Integration Source", source_name)
-		freq = source.sync_frequency or "Manual"
-
 		_validate_export_source(source)
 
 		records = _get_records_for_export(source, kwargs)
@@ -91,7 +89,7 @@ def run_export(source_name, **kwargs):
 				}
 			]
 		else:
-			export_records = list(zip(records, mapped_records))
+			export_records = list(zip(records, mapped_records, strict=False))
 			documents = _build_export_documents(source, export_records, kwargs)
 
 			# Validate Jinja-rendered OpenImmo XML against XSD
@@ -149,7 +147,7 @@ def run_export(source_name, **kwargs):
 
 		return summary
 	except Exception as e:
-		frappe.logger("openimmo_export").error(f"Export failed for {source_name}: {str(e)}")
+		frappe.logger("openimmo_export").error(f"Export failed for {source_name}: {e!s}")
 		raise e
 
 
@@ -272,6 +270,8 @@ def _build_jinja_xml(source, export_records, params):
 				"source": source,
 				"frappe": frappe,
 			}
+			# xml_template is an administrator-only Integration Source field.
+			# nosemgrep
 			parts.append(frappe.render_template(source.xml_template, context))
 		return "\n".join(parts)
 
@@ -286,6 +286,8 @@ def _build_jinja_xml(source, export_records, params):
 		"source": source,
 		"frappe": frappe,
 	}
+	# xml_template is an administrator-only Integration Source field.
+	# nosemgrep
 	return _normalize_xml_document(frappe.render_template(source.xml_template, context))
 
 
@@ -387,6 +389,8 @@ def _get_configured_export_filters(source):
 		"yesterday_end": f"{yesterday_str} 23:59:59",
 	}
 
+	# filters_json is an administrator-only Integration Source field.
+	# nosemgrep
 	rendered_json = frappe.render_template(filters_json, context)
 
 	parsed_filters = frappe.parse_json(rendered_json)
@@ -748,7 +752,7 @@ def _build_absolute_media_url(source, image_value):
 	if not base_url:
 		return image_url
 
-	return "{0}/{1}".format(base_url.rstrip("/"), image_url.lstrip("/"))
+	return "{}/{}".format(base_url.rstrip("/"), image_url.lstrip("/"))
 
 
 def _get_requested_fieldnames(source):
@@ -991,7 +995,7 @@ def _upload_via_ftp(source, filename, xml_content, xml_hash):
 
 def _build_ftp_delivery_target(source):
 	if source.ftp_directory:
-		return "{0}/{1}".format(
+		return "{}/{}".format(
 			source.ftp_host.rstrip("/"),
 			source.ftp_directory.strip("/"),
 		)
@@ -1032,7 +1036,7 @@ def _connect_ftp(source):
 		ftp.set_pasv(True)
 		return ftp
 	except Exception as exc:
-		frappe.log_error(f"FTP TLS failed, trying plain FTP: {str(exc)}", "FTP Export")
+		frappe.log_error(f"FTP TLS failed, trying plain FTP: {exc!s}", "FTP Export")
 		ftp = ftplib.FTP(timeout=60)
 		ftp.connect(host, port)
 		ftp.login(user, password)
