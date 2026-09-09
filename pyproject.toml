@@ -11,6 +11,7 @@ dependencies = [
     "xmltodict",
     "requests",
     "lxml==6.1.0",
+    "defusedxml",
     "xmlschema"
 ]
 
