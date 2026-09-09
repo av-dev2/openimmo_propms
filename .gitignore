@@ -5,3 +5,5 @@
 tags
 node_modules
 __pycache__
+# Cloned by the frappe-semgrep-rules pre-commit hook
+frappe-semgrep-rules/
