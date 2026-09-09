@@ -1,8 +1,12 @@
 import json
-import xml.etree.ElementTree as ET
 
+# Parsing goes through defusedxml below, ET is only used to serialize nodes.
+import xml.etree.ElementTree as ET  # nosemgrep
+
+import defusedxml.ElementTree
 import frappe
 import requests
+from defusedxml.common import DefusedXmlException
 from frappe import _
 from frappe.utils.file_manager import save_file
 
@@ -78,7 +82,7 @@ class APIProcessor(BaseProcessor):
 		split_node = self.source_doc.data_split_node
 
 		try:
-			root = ET.fromstring(content)
+			root = defusedxml.ElementTree.fromstring(content)
 
 			# Metadata-driven lookup
 			if ns_url and split_node:
@@ -108,7 +112,7 @@ class APIProcessor(BaseProcessor):
 						"filename": f"data_{obj_id}.xml",
 					}
 				)
-		except ET.ParseError:
+		except (ET.ParseError, DefusedXmlException):
 			files.append(
 				{
 					"content": content.decode("utf-8"),
