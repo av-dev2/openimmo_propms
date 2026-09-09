@@ -3,12 +3,12 @@
 OPENIMMO_JINJA_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
 <!-- OpenImmo $VERSION: 1.2.7 -->
 <openimmo>
-    <uebertragung art="ONLINE" 
-                  umfang="{{ source.transfer_scope }}" 
-                  modus="{{ source.transfer_mode }}" 
-                  version="1.2.7" 
-                  sendersoftware="OIGEN" 
-                  senderversion="1.0" 
+    <uebertragung art="ONLINE"
+                  umfang="{{ source.transfer_scope }}"
+                  modus="{{ source.transfer_mode }}"
+                  version="1.2.7"
+                  sendersoftware="OIGEN"
+                  senderversion="1.0"
                   timestamp="{{ frappe.utils.now_datetime().strftime('%Y-%m-%dT%H:%M:%S') }}"
                   {%- if source.regi_id %} regi_id="{{ source.regi_id }}"{% endif -%}/>
     <anbieter>
@@ -41,7 +41,7 @@ OPENIMMO_JINJA_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
                     {%- endif -%}
                     <nutzungsart WOHNEN="{{ ns_na.wohnen }}" GEWERBE="{{ ns_na.gewerbe }}" ANLAGE="{{ ns_na.anlage }}" WAZ="{{ ns_na.waz }}"/>
                     <vermarktungsart KAUF="false" MIETE_PACHT="true" ERBPACHT="false" LEASING="false"/>
-                    
+
                     <objektart>
                         {%- if doc.custom_property_type -%}
                             {%- set prop_type = get_document("Property Type", doc.custom_property_type) -%}
@@ -162,7 +162,7 @@ OPENIMMO_JINJA_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
                     <heizungsart OFEN="{{ 'true' if doc.custom_type_of_heating == 'Einzelofen' else 'false' }}"
                                  ZENTRAL="{{ 'true' if doc.custom_type_of_heating == 'Sammelheizung' else 'false' }}"/>
                     {%- endif -%}
-                    
+
                     {%- if doc.custom_energy_carrier or doc.custom_hot_water_preparation -%}
                     <befeuerung GAS="{{ 'true' if doc.custom_energy_carrier == 'Gas' else 'false' }}"
                                SOLAR="{{ 'true' if doc.custom_energy_carrier == 'Solar' else 'false' }}"
@@ -180,7 +180,7 @@ OPENIMMO_JINJA_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
                     {%- if doc.custom_elevator is not none -%}
                     <fahrstuhl PERSONEN="{{ 'true' if doc.custom_elevator in [True, 'true', 1, '1'] else 'false' }}"/>
                     {%- endif -%}
-                    
+
                     {%- if doc.custom_garage_spaces is not none -%}
                     <stellplatzart GARAGE="{{ 'true' if doc.custom_garage_spaces else 'false' }}"/>
                     {%- endif -%}
@@ -334,7 +334,7 @@ OPENIMMO_JINJA_TEMPLATE = """<?xml version="1.0" encoding="UTF-8"?>
                                     {%- set is_hero = true -%}
                                 {%- endif -%}
                             {%- endif -%}
-                            
+
                             <anhang location="EXTERN" gruppe="{{ 'TITELBILD' if is_hero else 'BILD' }}">
                                 <format>{{ img_path.split('.')[-1].upper() if '.' in img_path else 'JPEG' }}</format>
                                 <daten>
