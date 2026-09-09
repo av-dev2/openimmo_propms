@@ -44,7 +44,7 @@ app_license = "mit"
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
-doctype_list_js = {"CRM Lead" : "public/js/crm_lead_list.js"}
+doctype_list_js = {"CRM Lead": "public/js/crm_lead_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -84,7 +84,7 @@ jinja = {
 	"filters": [
 		"openimmo_propms.utils.jinja_methods.format_immowelt_date",
 		"openimmo_propms.utils.jinja_methods.format_decimal",
-	]
+	],
 }
 
 # Installation
@@ -152,11 +152,7 @@ jinja = {
 # 		"on_trash": "method"
 # 	}
 # }
-scheduler_events = {
-    "daily": [
-        "openimmo_propms.services.sync_engine.execute_scheduled_sync"
-    ]
-}
+scheduler_events = {"daily": ["openimmo_propms.services.sync_engine.execute_scheduled_sync"]}
 # Scheduled Tasks
 # ---------------
 
@@ -261,4 +257,3 @@ scheduler_events = {
 
 # Scheduled Tasks
 # ---------------
-
