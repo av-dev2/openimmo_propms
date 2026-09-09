@@ -1,11 +1,13 @@
 # Copyright (c) 2025, Aakvatech and contributors
 # For license information, please see license.txt
 
-import frappe
-from frappe import _
-from openimmo_propms.processors.base_processor import BaseProcessor
 import ftplib
 import os
+
+import frappe
+from frappe import _
+
+from openimmo_propms.processors.base_processor import BaseProcessor
 
 
 class FTPProcessor(BaseProcessor):
@@ -18,13 +20,13 @@ class FTPProcessor(BaseProcessor):
 
 		try:
 			ftp = self._connect()
-			
+
 			# Change to directory if specified
 			if self.source_doc.ftp_directory:
 				ftp.cwd(self.source_doc.ftp_directory)
 
 			# List only XML files
-			files = [f for f in ftp.nlst() if f.lower().endswith('.xml')]
+			files = [f for f in ftp.nlst() if f.lower().endswith(".xml")]
 			new_jobs = []
 
 			for filename in files:
@@ -37,7 +39,7 @@ class FTPProcessor(BaseProcessor):
 				new_jobs.append(job_name)
 
 			ftp.quit()
-			
+
 			status_msg = _("Successfully fetched {0} new files").format(len(new_jobs))
 			self.update_source_status("Success")
 			return new_jobs
@@ -54,7 +56,9 @@ class FTPProcessor(BaseProcessor):
 			ftp.quit()
 			return True, _("Connection Successful!")
 		except ftplib.error_perm as e:
-			return False, _("Login Failed: Please check your FTP Username and Password. (Error: {0})").format(str(e))
+			return False, _("Login Failed: Please check your FTP Username and Password. (Error: {0})").format(
+				str(e)
+			)
 		except Exception as e:
 			return False, _("Connection Failed: {0}").format(str(e))
 
@@ -68,16 +72,16 @@ class FTPProcessor(BaseProcessor):
 		try:
 			# Use FTP_TLS for secure connection (common for Immowelt)
 			ftp = ftplib.FTP_TLS(timeout=60)
-			ftp.encoding = "utf-8" # Add UTF-8 support as per documentation
+			ftp.encoding = "utf-8"  # Add UTF-8 support as per documentation
 			ftp.connect(host, port)
-			
+
 			if user:
 				ftp.login(user, password)
 				# Secure the data connection
 				ftp.prot_p()
 			else:
 				ftp.login()
-			
+
 			ftp.set_pasv(True)
 			return ftp
 		except Exception as e:
@@ -103,16 +107,18 @@ class FTPProcessor(BaseProcessor):
 			content = f.read()
 			if "</openimmo>" not in content.lower():
 				os.remove(local_path)
-				return None # Skip incomplete file
+				return None  # Skip incomplete file
 
 		# 3. Create Frappe File document
-		file_doc = frappe.get_doc({
-			"doctype": "File",
-			"file_name": filename,
-			"content": None, # Content is on disk
-			"file_url": f"/private/files/{temp_filename}",
-			"is_private": 1
-		})
+		file_doc = frappe.get_doc(
+			{
+				"doctype": "File",
+				"file_name": filename,
+				"content": None,  # Content is on disk
+				"file_url": f"/private/files/{temp_filename}",
+				"is_private": 1,
+			}
+		)
 		file_doc.insert(ignore_permissions=True)
-		
+
 		return file_doc.file_url
