@@ -16,11 +16,20 @@ frappe.ui.form.on("Integration Job", {
 	render_status_intro: function (frm) {
 		if (frm.doc.status === "Pending") {
 			if (!frm.is_new() && frm.doc.xml_file) {
-				frm.set_intro(__("Job is ready for processing. Click 'Process Now' to start sync."), "blue");
+				frm.set_intro(
+					__("Job is ready for processing. Click 'Process Now' to start sync."),
+					"blue"
+				);
 			} else if (frm.is_new()) {
-				frm.set_intro(__("Please upload the XML file and save the job to begin processing."), "orange");
+				frm.set_intro(
+					__("Please upload the XML file and save the job to begin processing."),
+					"orange"
+				);
 			} else {
-				frm.set_intro(__("XML File is missing. Please attach a file and save to proceed."), "red");
+				frm.set_intro(
+					__("XML File is missing. Please attach a file and save to proceed."),
+					"red"
+				);
 			}
 			return;
 		}
@@ -74,7 +83,7 @@ frappe.ui.form.on("Integration Job", {
 		// Minimalist validation check
 		if (!frm.doc.xml_file && !frm.doc.raw_data) {
 			frappe.throw(
-				__("No data found to process. Please attach a file or provide raw data."),
+				__("No data found to process. Please attach a file or provide raw data.")
 			);
 		}
 
