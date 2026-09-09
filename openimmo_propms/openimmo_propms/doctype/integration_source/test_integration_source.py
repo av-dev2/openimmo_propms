@@ -1,7 +1,8 @@
 # Copyright (c) 2025, Talib sheikh and Contributors
 # See license.txt
 
-import xml.etree.ElementTree as ET
+# Builds XML only, never parses untrusted input, so there is no XXE surface.
+import xml.etree.ElementTree as ET  # nosemgrep
 from types import SimpleNamespace
 
 from frappe.tests.utils import FrappeTestCase
