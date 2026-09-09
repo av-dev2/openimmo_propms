@@ -10,7 +10,8 @@ readme = "README.md"
 dependencies = [
     "xmltodict",
     "requests",
-    "lxml==6.1.0"
+    "lxml==6.1.0",
+    "xmlschema"
 ]
 
 [build-system]
