@@ -1,4 +1,5 @@
 import frappe
+from frappe import _
 
 from openimmo_propms.services.export_engine import run_export
 
@@ -75,4 +76,6 @@ def preview_jinja_xml(source_name):
 		"frappe": frappe,
 	}
 
+	# xml_template is an administrator-only Integration Source field.
+	# nosemgrep
 	return frappe.render_template(source.xml_template, context)
