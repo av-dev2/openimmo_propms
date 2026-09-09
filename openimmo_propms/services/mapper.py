@@ -103,7 +103,7 @@ def find_recursively(data, target_key):
 	if target_key in data:
 		return data[target_key]
 
-	for key, value in data.items():
+	for value in data.values():
 		if isinstance(value, dict):
 			result = find_recursively(value, target_key)
 			if result is not None:
