@@ -418,4 +418,4 @@ def _build_absolute_media_url(source, image_value):
 	if not base_url:
 		return image_url
 
-	return "{0}/{1}".format(base_url.rstrip("/"), image_url.lstrip("/"))
+	return "{}/{}".format(base_url.rstrip("/"), image_url.lstrip("/"))
